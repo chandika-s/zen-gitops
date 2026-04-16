@@ -1,7 +1,7 @@
 replicaCount: 1
 fullnameOverride: manufacturing-service
 image:
-  repository: 873135413040.dkr.ecr.us-east-1.amazonaws.com/manufacturing-service
+  repository: 020930354342.dkr.ecr.us-east-1.amazonaws.com/manufacturing-service
   tag: sha-07f67e7
   pullPolicy: Always
 service:
