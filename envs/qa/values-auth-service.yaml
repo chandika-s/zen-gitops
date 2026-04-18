@@ -1,8 +1,10 @@
 replicaCount: 1
 
+fullnameOverride: auth-service
+
 image:
-  repository: <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/pharma-auth-service
-  tag: latest
+  repository: 873135413040.dkr.ecr.us-east-1.amazonaws.com/auth-service
+  tag: v1.0.0
   pullPolicy: Always
 
 service:
@@ -19,14 +21,14 @@ ingress:
 
 resources:
   requests:
-    cpu: 150m
+    cpu: 100m
     memory: 256Mi
   limits:
     cpu: 500m
     memory: 512Mi
 
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 70
@@ -51,8 +53,8 @@ readinessProbe:
 
 configmap:
   SPRING_PROFILES_ACTIVE: qa
-  DB_HOST: <RDS_ENDPOINT>
-  LOG_LEVEL: INFO
+  DB_HOST: pharma-qa-postgres.cs3c424yurej.us-east-1.rds.amazonaws.com
+  LOG_LEVEL: DEBUG
   SERVER_PORT: "8081"
   TOKEN_EXPIRATION_MS: "86400000"
   MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,metrics,prometheus"
@@ -62,6 +64,14 @@ envFrom:
       name: db-credentials
   - secretRef:
       name: jwt-secret
+
+volumeMounts:
+  - name: tmp
+    mountPath: /tmp
+
+volumes:
+  - name: tmp
+    emptyDir: {}
 
 serviceAccount:
   create: true
